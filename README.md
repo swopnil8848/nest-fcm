@@ -14,6 +14,7 @@ npm install
 FIREBASE_PROJECT_ID=your-firebase-project-id
 FIREBASE_CLIENT_EMAIL=your-service-account-email
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_HERE\n-----END PRIVATE KEY-----\n"
+NODE_ENV="development" or "production"
 ```
 
 3. Start the application
@@ -24,7 +25,7 @@ npm run start:dev
 ## API Endpoints
 
 ### Send Single Notification
-**POST** `/send-notification`
+**POST** `/notification/send`
 
 ```json
 {
@@ -36,7 +37,7 @@ npm run start:dev
 ```
 
 ### Send Multiple Notifications
-**POST** `/send-multiple-notifications`
+**POST** `/notifications/send-multiple-`
 
 ```json
 {
