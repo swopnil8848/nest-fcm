@@ -1,17 +1,25 @@
 // src/app.module.ts
 
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { config } from 'dotenv';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { NotificationModule } from './notification/notification.module';
+import { APP_PIPE } from '@nestjs/core';
 
 config();
 
 @Module({
-  imports: [],
+  imports: [NotificationModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {
   constructor() {
