@@ -9,6 +9,8 @@ import {
 export class NotificationService {
   async sendNotification({ token, title, body, icon }: NotificationDto) {
     try {
+      //   throw Error('test error');
+
       const response = await admin.messaging().send({
         token,
         webpush: {
@@ -21,12 +23,8 @@ export class NotificationService {
       });
       return response;
     } catch (error) {
-      Logger.log('Error Sending Notification ', error.message);
-      return { success: 'false', message: 'Failed to send notifications' };
-
-    // throw error since we dont usually send error for failed notitfication 
-    //   const errormessage = error.message || "Failed To Send Notification!"
-    //   throw new BadRequestException(errormessage)
+      const errormessage = error.message || 'failed to send notification';
+      throw new BadRequestException(errormessage);
     }
   }
 
@@ -53,8 +51,8 @@ export class NotificationService {
         message: `Successfully sent ${response.successCount} messages; ${response.failureCount} failed.`,
       };
     } catch (error) {
-      Logger.log('Error sending messages:', error);
-      return { success: false, message: 'Failed to send notifications' };
+      const errormessage = error.message || 'failed to send notification';
+      throw new BadRequestException(errormessage);
     }
   }
 }

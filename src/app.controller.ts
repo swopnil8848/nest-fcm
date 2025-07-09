@@ -5,6 +5,4 @@ import { AppService } from './app.service';
 import { MultipleDeviceNotificationDto } from './notification/dto/notification.dto';
 
 @Controller()
-export class AppController {
-
-}
+export class AppController {}
