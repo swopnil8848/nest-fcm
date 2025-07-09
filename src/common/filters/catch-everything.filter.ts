@@ -25,11 +25,17 @@ export class CatchEverythingFilter implements ExceptionFilter {
       ? exception.getStatus()
       : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const message = isHttpException
-      ? this.extractMessage(exception.getResponse())
-      : 'Internal server error';
-
     const isProduction = process.env.NODE_ENV === 'production';
+
+    let message: string;
+
+    if (isHttpException) {
+      message = this.extractMessage(exception.getResponse());
+    } else if (exception instanceof Error) {
+      message = exception.message || 'Internal server error';
+    } else {
+      message = 'Internal server error';
+    }
 
     const errorDetails =
       !isProduction && exception instanceof Error
@@ -41,7 +47,6 @@ export class CatchEverythingFilter implements ExceptionFilter {
         : undefined;
 
     const responseBody = {
-      success: false,
       statusCode: httpStatus,
       status: 'fail',
       message,
@@ -81,6 +86,6 @@ export class CatchEverythingFilter implements ExceptionFilter {
       }
     }
 
-    return 'An error occurred';
+    return 'Internal server error';
   }
 }

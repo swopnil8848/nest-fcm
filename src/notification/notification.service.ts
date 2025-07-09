@@ -8,24 +8,18 @@ import {
 @Injectable()
 export class NotificationService {
   async sendNotification({ token, title, body, icon }: NotificationDto) {
-    try {
-      //   throw Error('test error');
-
-      const response = await admin.messaging().send({
-        token,
-        webpush: {
-          notification: {
-            title,
-            body,
-            icon,
-          },
+    const response = await admin.messaging().send({
+      token,
+      webpush: {
+        notification: {
+          title,
+          body,
+          icon,
         },
-      });
-      return response;
-    } catch (error) {
-      const errormessage = error.message || 'failed to send notification';
-      throw new BadRequestException(errormessage);
-    }
+      },
+    });
+    
+    return response;
   }
 
   async sendNotificationToMultipleTokens({
@@ -43,16 +37,13 @@ export class NotificationService {
       tokens,
     };
 
-    try {
-      const response = await admin.messaging().sendEachForMulticast(message);
-      Logger.log('Successfully sent messages:', response);
-      return {
-        success: true,
-        message: `Successfully sent ${response.successCount} messages; ${response.failureCount} failed.`,
-      };
-    } catch (error) {
-      const errormessage = error.message || 'failed to send notification';
-      throw new BadRequestException(errormessage);
-    }
+    const response = await admin.messaging().sendEachForMulticast(message);
+
+    Logger.log('Successfully sent messages:', response);
+
+    return {
+      success: true,
+      message: `Successfully sent ${response.successCount} messages; ${response.failureCount} failed.`,
+    };
   }
 }

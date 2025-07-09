@@ -6,7 +6,9 @@ import { config } from 'dotenv';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { NotificationModule } from './notification/notification.module';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { CatchEverythingFilter } from './common/filters/catch-everything.filter';
+import { SuccessResponseInterceptor } from './common/filters/success-response.interceptor';
 
 config();
 
@@ -15,6 +17,14 @@ config();
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: SuccessResponseInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: CatchEverythingFilter,
+    },
     {
       provide: APP_PIPE,
       useValue: new ValidationPipe({
